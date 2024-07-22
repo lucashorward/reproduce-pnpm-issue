@@ -1,0 +1,168 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
+  },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": [],
+    "production": [
+      "default",
+      "!{projectRoot}/src/test-setup.[jt]s",
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/**/*.stories.@(js|jsx|ts|tsx|mdx)",
+      "!{projectRoot}/.storybook/**/*",
+      "!{projectRoot}/tsconfig.storybook.json"
+    ],
+    "sharedTestInputs": [
+      "{projectRoot}/**/*.ts",
+      "{projectRoot}/tsconfig.spec.json",
+      "{workspaceRoot}/jest.config.ts",
+      "{workspaceRoot}/jest.preset.js"
+    ]
+  },
+  "generators": {
+    "@nx/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "none"
+    },
+    "@nx/angular:library": {
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "style": "scss"
+    },
+    "@nx/angular:component": {
+      "style": "scss"
+    }
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": [
+        "production",
+        "^production",
+        "{projectRoot}/tsconfig.json",
+        "{projectRoot}/tsconfig.app.json",
+        "{workspaceRoot}/tsconfig.base.json",
+        "{projectRoot}/webpack.config.(ts|js)",
+        "{workspaceRoot}/webpack.ts.config.js",
+        "!{projectRoot}/**/*.spec.ts",
+        "!{projectRoot}/**/__mocks__/**",
+        "{projectRoot}/serverless.yml",
+        "{projectRoot}/serverless/**/*.yml",
+        "{workspaceRoot}/serverless-common/**/*.yml",
+        "{workspaceRoot}/serverless-common-ts/**/*.ts"
+      ],
+      "cache": true
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx serverless deploy --verbose --stage {args.stage}",
+        "cwd": "{projectRoot}/",
+        "forwardAllArgs": false
+      }
+    },
+    "e2e-test": {
+      "executor": "@nx/jest:jest",
+      "inputs": ["{projectRoot}/jest.e2e.config.(js|ts)", "sharedTestInputs"],
+      "options": {
+        "jestConfig": "{projectRoot}/jest.e2e.config.ts"
+      },
+      "cache": true
+    },
+    "integration-test": {
+      "executor": "@nx/jest:jest",
+      "inputs": [
+        "{projectRoot}/jest.integration.config.(js|ts)",
+        "sharedTestInputs",
+        "^sharedTestInputs"
+      ],
+      "options": {
+        "jestConfig": "{projectRoot}/jest.integration.config.ts"
+      },
+      "cache": true
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "inputs": [
+        "{projectRoot}/**/*.ts",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintrc.personalisation.jsonc",
+        "{workspaceRoot}/tools/eslint-rules/**/*"
+      ],
+      "options": {
+        "lintFilePatterns": ["{projectRoot}/**/*.ts"]
+      },
+      "cache": true
+    },
+    "print": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx serverless print --stage {args.stage}",
+        "cwd": "{projectRoot}/",
+        "forwardAllArgs": false
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "inputs": ["{projectRoot}/jest.config.(js|ts)", "sharedTestInputs", "^sharedTestInputs"],
+      "options": {
+        "jestConfig": "{projectRoot}/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "outputs": [
+        "{projectRoot}/.jestcache",
+        "{workspaceRoot}/coverage/apps/{projectName}/**",
+        "{workspaceRoot}/test-reports/{projectName}.xml"
+      ],
+      "cache": true
+    },
+    "update-swagger": {
+      "executor": "./tools/executors/execute-ts:execute-ts",
+      "options": {
+        "tsExecutor": "@integration/serverless-helpers:update-openapi-spec"
+      }
+    },
+    "build-storybook": {
+      "inputs": [
+        "default",
+        "^production",
+        "{projectRoot}/.storybook/**/*",
+        "{projectRoot}/tsconfig.storybook.json"
+      ],
+      "cache": true
+    },
+    "@nx/jest:jest": {
+      "cache": true,
+      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
+      "options": {
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "@nx/eslint:lint": {
+      "executor": "@nx/eslint:lint",
+      "inputs": [
+        "{projectRoot}/**/*.ts",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintrc.personalisation.jsonc",
+        "{workspaceRoot}/tools/eslint-rules/**/*"
+      ],
+      "options": {
+        "lintFilePatterns": ["{projectRoot}/**/*.ts"]
+      },
+      "cache": true
+    }
+  },
+  "useInferencePlugins": false,
+  "defaultBase": "master"
+}

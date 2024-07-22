@@ -1,0 +1,98 @@
+{
+  "name": "my-nx-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/offer-store/src",
+  "projectType": "application",
+  "tags": ["scope:my-nx-app"],
+  "targets": {
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "serverless deploy --verbose --stage {args.stage}",
+        "cwd": "apps/offer-store",
+        "forwardAllArgs": false
+      }
+    },
+    "diff": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "serverless diff --stage {args.stage}",
+        "cwd": "apps/offer-store",
+        "forwardAllArgs": false
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "serverless package --stage {args.stage}",
+        "cwd": "apps/offer-store",
+        "forwardAllArgs": false
+      }
+    },
+    "update-swagger": {
+      "executor": "./tools/executors/execute-ts:execute-ts",
+      "options": {
+        "tsExecutor": "@integration/serverless-helpers:update-openapi-spec"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "serverless offline --noAuth --noPrependStageInUrl",
+        "cwd": "apps/offer-store"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/offer-store"],
+      "options": {
+        "jestConfig": "apps/offer-store/jest.config.ts",
+        "silent": true
+      }
+    },
+    "integration-test-bs": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/integration-tests/apps/offer-store"],
+      "options": {
+        "silent": true,
+        "jestConfig": "apps/offer-store/int.jest.config.ts",
+        "passWithNoTests": false
+      }
+    },
+    "invoke": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "serverless invoke local --function {args.function}",
+        "cwd": "apps/offer-store",
+        "forwardAllArgs": false
+      }
+    },
+    "invoke-data": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "serverless invoke local --function {args.function} --path {args.path}",
+        "cwd": "apps/offer-store",
+        "forwardAllArgs": false
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "npx tsc --project tsconfig.app.json --noEmit --pretty --resolveJsonModule",
+          "npx tsc --project tsconfig.spec.json --noEmit --pretty --resolveJsonModule"
+        ],
+        "cwd": "apps/offer-store"
+      }
+    }
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["{workspaceRoot}/serverless-common-bs/**/*.ts"]
+    }
+  }
+}

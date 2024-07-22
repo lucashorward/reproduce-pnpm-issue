@@ -1,0 +1,32 @@
+{
+  "name": "workspace",
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "version": {
+      "executor": "@jscutlery/semver:version",
+      "options": {
+        "syncVersions": true,
+        "preset": "conventional",
+        "skipProjectChangelog": true,
+        "commitMessageFormat": "chore: release version ${version}",
+        "changelogHeader": "# Changelog",
+        "baseBranch": "master"
+      }
+    },
+    "build": {
+      "executor": "nx:noop"
+    },
+    "lint": {
+      "executor": "nx:noop"
+    },
+    "test": {
+      "executor": "nx:noop"
+    },
+    "integration-test": {
+      "executor": "nx:noop"
+    },
+    "typecheck": {
+      "executor": "nx:noop"
+    }
+  }
+}

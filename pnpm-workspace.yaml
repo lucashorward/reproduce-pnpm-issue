@@ -1,0 +1,3 @@
+packages:
+  - apps/my-nx-app
+  - apps/my-nx-app/tests

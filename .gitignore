@@ -1,0 +1,93 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
+/tmp
+/out-tsc
+test-reports
+test-report.xml
+public
+.webpack
+.nx/
+.serverless
+**/.build
+**/.jestcache
+generated-child-pipeline.yml
+Address_Netbeheer.csv
+generated-child-pipeline-regression.yml
+.axway
+.confluence
+.stryker-tmp
+
+# dependencies
+node_modules
+.npm
+.pnpm-store
+# Gitlab generated these bill of material in the pipelines
+**/gl-sbom-npm-pnpm.cdx.json
+
+# IDEs and editors
+.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+.vscodeignore
+.gpt-runner
+.history
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+.nx/cache
+.nx/workspace-data
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Typescript
+tsconfig.tsbuildinfo
+
+# Angular
+.angular/*
+/apps/sourcing-service/src/app
+
+# Data importer
+/tools/sourcing/import-migration-data/history.json
+
+gists
+
+.angular
+.env
+
+# typeorm
+ormlogs.log
+
+# drawio backup
+*.bkp
+
+.scannerwork/
+
+# Cucumber Test Reports
+cucumber_html_report.html
+cucumber_report.json
+tempfile
+
+# Wallaby.js
+wallaby.js

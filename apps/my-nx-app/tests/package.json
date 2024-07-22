@@ -1,0 +1,17 @@
+{
+  "name": "my-nx-app-tests",
+  "version": "0.0.01",
+  "dependencies": {
+    "@aws-sdk/credential-providers": "*",
+    "aws4-axios": "*",
+    "axios": "*",
+    "date-fns": "*",
+    "jest": "*",
+    "uuid": "*",
+    "jest-after-this": "*"
+  },
+  "devDependencies": {
+    "@types/jest": "*",
+    "@types/uuid": "*"
+  }
+}
